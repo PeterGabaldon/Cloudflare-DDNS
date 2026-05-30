@@ -12,9 +12,26 @@ A minimal bash script that acts as a Dynamic DNS (DDNS) client for Cloudflare. I
 
 - `bash` and `curl`
 - A Cloudflare account with a domain managed by Cloudflare
-- A Cloudflare **API Token** with `Zone.DNS` edit permissions ([create one here](https://dash.cloudflare.com/profile/api-tokens))
 - The **Zone ID** of your domain (found on the domain's overview page in the Cloudflare dashboard)
 - An existing **A record** for the hostname you want to update (e.g. `dyn.mydomain.com`)
+- A Cloudflare **API Token** (see below)
+
+## Creating the API Token
+
+Follow these steps to create a token with the **minimum required permissions**:
+
+1. Go to [Cloudflare API Tokens](https://dash.cloudflare.com/profile/api-tokens) and click **Create Token**.
+2. Click **Get started** next to *Create Custom Token*.
+3. Give the token a descriptive name, e.g. `DDNS Updater`.
+4. Under **Permissions**, add a single permission:
+   - *Zone* → *DNS* → **Edit**
+5. Under **Zone Resources**, restrict the token to only the zone it needs:
+   - *Include* → *Specific zone* → select your domain (e.g. `mydomain.com`)
+6. (Optional) Under **Client IP Address Filtering**, you can lock the token to the IP of the machine that will run the script for extra security.
+7. Click **Continue to summary**, review, and click **Create Token**.
+8. Copy the token value — it will only be shown once.
+
+> **Note:** Do not use a Global API Key. A scoped API token limited to `Zone.DNS Edit` on a single zone is the most secure option.
 
 ## Configuration
 
