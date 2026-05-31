@@ -12,7 +12,7 @@ A minimal bash script that acts as a Dynamic DNS (DDNS) client for Cloudflare. I
 
 - `bash` and `curl`
 - A Cloudflare account with a domain managed by Cloudflare
-- The **Zone ID** of your domain (found on the domain's overview page in the Cloudflare dashboard)
+- Your **domain name** managed by Cloudflare (e.g. `mydomain.com`)
 - An existing **A record** for the hostname you want to update (e.g. `dyn.mydomain.com`)
 - A Cloudflare **API Token** (see below)
 
@@ -23,7 +23,8 @@ Follow these steps to create a token with the **minimum required permissions**:
 1. Go to [Cloudflare API Tokens](https://dash.cloudflare.com/profile/api-tokens) and click **Create Token**.
 2. Click **Get started** next to *Create Custom Token*.
 3. Give the token a descriptive name, e.g. `DDNS Updater`.
-4. Under **Permissions**, add a single permission:
+4. Under **Permissions**, add the following permissions:
+   - *Zone* → *Zone* → **Read**
    - *Zone* → *DNS* → **Edit**
 5. Under **Zone Resources**, restrict the token to only the zone it needs:
    - *Include* → *Specific zone* → select your domain (e.g. `mydomain.com`)
@@ -31,23 +32,25 @@ Follow these steps to create a token with the **minimum required permissions**:
 7. Click **Continue to summary**, review, and click **Create Token**.
 8. Copy the token value — it will only be shown once.
 
-> **Note:** Do not use a Global API Key. A scoped API token limited to `Zone.DNS Edit` on a single zone is the most secure option.
+> **Note:** Do not use a Global API Key. A scoped API token limited to `Zone.Zone Read` + `Zone.DNS Edit` on a single zone is the most secure option.
 
 ## Configuration
 
 Open `update-dns.sh` and fill in the three variables at the top:
 
 ```bash
-ZONE_ID="your_zone_id"
+ZONE_NAME="mydomain.com"
 RECORD_NAME="dyn.mydomain.com"
 API_TOKEN="your_cloudflare_api_token"
 ```
 
-| Variable      | Description                                           |
-|---------------|-------------------------------------------------------|
-| `ZONE_ID`     | The Zone ID from your Cloudflare domain overview page |
-| `RECORD_NAME` | The full hostname of the A record to update           |
-| `API_TOKEN`   | A Cloudflare API token with DNS edit permissions      |
+| Variable      | Description                                              |
+|---------------|----------------------------------------------------------|
+| `ZONE_NAME`   | Your domain name as it appears in Cloudflare             |
+| `RECORD_NAME` | The full hostname of the A record to update              |
+| `API_TOKEN`   | A Cloudflare API token with DNS edit permissions         |
+
+The script automatically resolves the Cloudflare Zone ID from the domain name at runtime.
 
 ## Usage
 
